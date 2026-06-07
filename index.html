@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="/">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="GYM RAIMUNDO - App profissional de Personal Training">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="GYM RAIMUNDO">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#FF4500">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+  <!-- iOS splash screens -->
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/Icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/Icon-192.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="icons/Icon-192.png">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <title>GYM RAIMUNDO</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background-color: #0A0A0A;
+      overflow: hidden;
+    }
+    #loading {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #0A0A0A;
+      z-index: 9999;
+    }
+    .logo-circle {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF4500, #CC3700);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 40px rgba(255,69,0,0.5);
+      animation: pulse 2s infinite;
+      margin-bottom: 24px;
+    }
+    .logo-circle svg {
+      width: 56px;
+      height: 56px;
+      fill: white;
+    }
+    .app-name {
+      font-family: Arial Black, sans-serif;
+      font-size: 13px;
+      color: #FFD700;
+      letter-spacing: 10px;
+      margin-bottom: 4px;
+    }
+    .app-title {
+      font-family: Arial Black, sans-serif;
+      font-size: 42px;
+      color: white;
+      letter-spacing: 6px;
+      line-height: 0.9;
+      margin-bottom: 8px;
+    }
+    .app-sub {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      color: #888;
+      letter-spacing: 4px;
+      margin-bottom: 48px;
+    }
+    .progress-bar {
+      width: 60px;
+      height: 3px;
+      background: #222;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #FF4500;
+      border-radius: 2px;
+      animation: load 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 40px rgba(255,69,0,0.5); }
+      50% { box-shadow: 0 0 60px rgba(255,69,0,0.8); }
+    }
+    @keyframes load {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+
+    /* iOS install banner */
+    #ios-banner {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: #1A1A1A;
+      border-top: 1px solid #333;
+      padding: 16px;
+      z-index: 10000;
+      text-align: center;
+    }
+    #ios-banner p {
+      color: #fff;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+      margin-bottom: 8px;
+    }
+    #ios-banner small {
+      color: #888;
+      font-size: 12px;
+    }
+    #ios-banner button {
+      background: transparent;
+      border: none;
+      color: #FF4500;
+      font-size: 20px;
+      position: absolute;
+      top: 8px; right: 12px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading">
+    <div class="logo-circle">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/>
+      </svg>
+    </div>
+    <div class="app-name">GYM</div>
+    <div class="app-title">RAIMUNDO</div>
+    <div class="app-sub">PERSONAL TRAINER</div>
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- Banner iOS -->
+  <div id="ios-banner">
+    <button onclick="document.getElementById('ios-banner').style.display='none'">×</button>
+    <p>📱 <strong>Instalar GYM RAIMUNDO no iPhone</strong></p>
+    <small>Toque em <strong>Compartilhar</strong> ↑ depois em <strong>"Adicionar à Tela de Inicio"</strong></small>
+  </div>
+
+  <script>
+    // Detectar iOS e mostrar banner de instalação
+    const isIos = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+    const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
+    if (isIos && !isInStandaloneMode) {
+      setTimeout(() => {
+        document.getElementById('ios-banner').style.display = 'block';
+      }, 3000);
+    }
+
+    // Service Worker para PWA offline
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('flutter-first-frame', function() {
+        navigator.serviceWorker.register('flutter_service_worker.js?v=1570913240') /* Flutter's service worker is deprecated and will be removed in a future Flutter release. */;
+      });
+    }
+  </script>
+
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
